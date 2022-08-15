@@ -5,7 +5,7 @@ Derived from the test/docs functions/macros in [magnars/s.e](https://github.com/
 ETD allows the simple writing of examples as tests and generation of
 markdown documents for both functions and examples.
 
-Currently this package is dogfooding in emacsfodder/kurecolor.  
+Currently a prototype of this package is dogfooding in emacsfodder/kurecolor.  
 This repo will be used by kurecolor when it is suitable to release on MELPA.  
 
 ## Usage:
