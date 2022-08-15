@@ -1,6 +1,6 @@
 # etd - **E**xamples **T**ests **D**ocs
 
-Derived from the test/docs functions/macros in magnars/s.el library.
+Derived from the test/docs functions/macros in [magnars/s.e](https://github.com/magnars/s.el) library.
 
 ETD allows the simple writing of examples as tests and generation of
 markdown documents for both functions and examples.
