@@ -1,12 +1,12 @@
 ;;; etd.el --- Examples Tests Docs -*- lexical-binding: t; -*-
 ;;
-;; Copyright (C) 2022 Jason M23
+;; Copyright (C) 2022 Jason Milkins
 ;;
 ;; Author: Jason Milkins <jasonm23@gmail.com>
 ;; Maintainer: Jason Milkins <jasonm23@gmail.com>
 ;; Created: August 14, 2022
 ;; Modified: August 14, 2022
-;; Version: 1.4.0
+;; Version: 1.4.4
 ;; Keywords: tests examples documentation markdown
 ;; Homepage: https://github.com/emacsfodder/etd
 ;; Package-Requires: ((emacs "24.3"))
@@ -32,13 +32,24 @@
 
 (require 'ert)
 
-(defvar etd-testing t "(Internal use) Run examples as tests when set to t. Generate documents from examples when nil.")
+(unless (>= emacs-major-version 24)
+  (error "Requires Emacs 24.1 or later"))
+
+(eval-when-compile
+ (if (= 24 emacs-major-version)
+     (progn
+      (require 'cl)
+      (when (locate-library "cl-lib")
+        (require 'cl-lib)))
+   (require 'cl-lib)))
+
+(defvar etd-testing t "When set to t run tests, when set to nil generate documents.")
 (defvar functions '() "Collected functions.")
 
 (defun examples-to-should-1 (examples)
   "Create one `should' from EXAMPLES."
   (let ((actual (car examples))
-        (expected (caddr examples)))
+        (expected (nth 2 examples)))
     `(let ((previous-match-data (match-data)))
        (should (equal-including-properties ,actual ,expected))
        (should (equal (match-data) previous-match-data)))))
@@ -48,7 +59,7 @@
   (let (result)
     (while examples
       (setq result (cons (examples-to-should-1 examples) result))
-      (setq examples (cdddr examples)))
+      (setq examples (cdr (cddr examples))))
     (nreverse result)))
 
 (defmacro defexamples (cmd &rest examples)
@@ -77,12 +88,12 @@
 (defun example-to-string (example)
   "EXAMPLE to string."
   (let ((actual (car example))
-        (expected (caddr example)))
+        (expected (nth 2 example)))
     (cl-reduce
-     (lambda (string regexp)
+     (lambda (str regexp)
        (replace-regexp-in-string
         (car regexp) (cdr regexp)
-        string t t))
+        str t t))
      '(("\r" . "\\r")
        ("\t" . "\\t")
        ("\\\\\\?" . "?"))
@@ -93,46 +104,47 @@
   (let (result)
     (while examples
       (setq result (cons (example-to-string examples) result))
-      (setq examples (cdddr examples)))
+      (setq examples (cdr (cddr examples))))
     (nreverse result)))
 
 (defun docs--signature (cmd)
   "Get signature for CMD."
   (if (eq 'macro (car cmd))
-      (caddr cmd)
+      (nth 2 cmd)
     (cadr cmd)))
 
 (defun docs--docstring (cmd)
   "Get docstring for CMD."
   (if (eq 'macro (car cmd))
-      (cadddr cmd)
-    (caddr cmd)))
+      (nth 3 cmd)
+    (nth 2 cmd)))
 
 (defun quote-and-downcase (string)
   "Wrap STRING in backquotes for markdown."
   (format "`%s`" (downcase string)))
 
 (defun quote-docstring (docstring)
-  "DOCSTRING args and back-quoted items to markdown style backtick quoting."
+  "Quote DOCSTRING."
   (if (null docstring)
       ""
-   (let (case-fold-search)
-    (replace-regexp-in-string
-     "`\\([^ ]+\\)'"
-     "`\\1`"
-     (replace-regexp-in-string
-      "\\b\\([A-Z][A-Z0-9-]*\\)\\b"
-      'quote-and-downcase
-      docstring t)))))
+   (let ((case-fold-search nil))
+    (replace-regexp-in-string "\\\\=" ""
+      (replace-regexp-in-string
+        (rx "`" (group (*? not-newline)) "'")
+        "`\\1`"
+        (replace-regexp-in-string
+         "\\b\\([A-Z][A-Z0-9-]*\\)\\b"
+         'quote-and-downcase
+         docstring t))))))
 
 (defun function-to-md (function)
-  "Generate markdown doc for FUNCTION."
+  "FUNCTION to markdown."
   (if (stringp function)
       ""
     (let ((command-name (car function))
           (signature (cadr function))
-          (docstring (quote-docstring (caddr function)))
-          (examples (cadddr function)))
+          (docstring (quote-docstring (nth 2 function)))
+          (examples (nth 3 function)))
       (format "### %s %s\n\n%s\n\n```lisp\n%s\n```\n"
               command-name
               (if signature (format "`%s`" signature) "")
@@ -148,18 +160,21 @@
       s)))
 
 (defun github-id (command-name signature)
-  "Generate GitHub anchor ID for COMMAND-NAME and SIGNATURE."
+  "Generate GitHub ID for COMMAND-NAME and SIGNATURE."
   (docs--chop-suffix
    "-"
    (replace-regexp-in-string "[^a-zA-Z0-9-]+" "-" (format "%S %S" command-name (if signature signature "")))))
 
 (defun function-summary (function)
-  "Create a single line entry for FUNCTION (a markdown bullet list item)."
+  "Create a markdown summary of FUNCTION."
   (if (stringp function)
       (concat "\n### " function "\n")
     (let ((command-name (car function))
           (signature (cadr function)))
-      (format "- [%s](#%s) %s" command-name (github-id command-name signature) (if signature (format "`%s`" signature) "")))))
+      (format "* [%s](#%s) %s"
+              command-name
+              (github-id command-name signature)
+              (if signature (format "`%s`" signature) "")))))
 
 (defun simplify-quotes ()
   "Simplify quotes in buffer."
@@ -219,8 +234,8 @@
       (setq first (cons (car list) first))
       (when (cadr list)
         (setq first (cons (cadr list) first))
-        (when (caddr list)
-          (setq first (cons (caddr list) first)))))
+        (when (nth 2 list)
+          (setq first (cons (nth 2 list) first)))))
     (nreverse first)))
 
 (provide 'etd)
