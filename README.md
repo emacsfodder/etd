@@ -39,5 +39,5 @@ The `defexample` macro creates/evaluates to `ert-deftests` / `should` expectatio
 
 Kurecolor has a suite of examples here: https://github.com/emacsfodder/kurecolor/blob/master/kurecolor-examples.el
 
-You can also generate documentation from the examples/groups.  See the sample at https://emacsfodder.github.io/kurecolor/
+You can also generate documentation from the examples/groups.  See the sample at https://emacsfodder.github.io/kurecolor/ (just from Markdown so theme/style is up to you.)
 
