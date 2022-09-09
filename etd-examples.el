@@ -30,12 +30,12 @@
 ;; ETD testing ...
 
 (def-example-group "Documentation Helper Functions"
- (defexamples first-three
-  (first-three '("one" "two" "three" "four" "five")) => '("one" "two" "three")
-  (first-three '(1 2 3 4 5)) => '(1 2 3))
+ (defexamples etd--first-three
+  (etd--first-three '("one" "two" "three" "four" "five")) => '("one" "two" "three")
+  (etd--first-three '(1 2 3 4 5)) => '(1 2 3))
 
- (defexamples function-to-md
-  (function-to-md
+ (defexamples etd--function-to-md
+  (etd--function-to-md
    '(example-func (string) "Return a reversed copy of STRING." ("(example-func \"abc\") => \"cba\"")))
   => "### example-func `(string)`
 
@@ -46,25 +46,24 @@ Return a reversed copy of `string`.
 ```
 ")
 
- (defexamples function-summary
-  (function-summary '(first-three (list) ((first-three '("one" "two" "three" "four" "five")))
-                      ⇒ '("one" "two" "three")
-                      (first-three '(1 2 3 4 5))
-                      ⇒ '(1 2 3)))
+ (defexamples etd--function-summary
+  (etd--function-summary '(first-three (list) ((first-three '("one" "two" "three" "four" "five")))
+                           ⇒ '("one" "two" "three")
+                           (first-three '(1 2 3 4 5))
+                           ⇒ '(1 2 3)))
   => "* [first-three](#first-three-list) `(list)`")
 
- (defexamples github-id
-   (github-id "foobzz" "(string &optional arg)") => "-foobzz-string-optional-arg"
-   (github-id "foobar" "(string list)") => "-foobar-string-list"
-   (github-id "foobaz" "(string &rest args)") => "-foobaz-string-rest-args")
+ ()
 
- (defexamples docs--chop-suffix
-   (docs--chop-suffix "Boom" "BigBaddaBoom") => "BigBadda"
-   (docs--chop-suffix "////" "BigBaddaBoom////") => "BigBaddaBoom"
-   (docs--chop-suffix "Badda" "BigBaddaBoom") => "BigBaddaBoom")
+ (defexamples etd--github-id
+   (etd--github-id "foobzz" "(string &optional arg)") => "-foobzz-string-optional-arg"
+   (etd--github-id "foobar" "(string list)") => "-foobar-string-list"
+   (etd--github-id "foobaz" "(string &rest args)") => "-foobaz-string-rest-args")
 
- (defexamples example-to-should-1
-   (example-to-should-1)))
+ (defexamples etd--docs--chop-suffix
+   (etd--docs--chop-suffix "Boom" "BigBaddaBoom") => "BigBadda"
+   (etd--docs--chop-suffix "////" "BigBaddaBoom////") => "BigBaddaBoom"
+   (etd--docs--chop-suffix "Badda" "BigBaddaBoom") => "BigBaddaBoom"))
 
 (provide 'etd-examples)
 ;;; etd-examples.el ends here
