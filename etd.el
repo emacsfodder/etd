@@ -9,7 +9,7 @@
 ;; Version: 1.4.4
 ;; Keywords: tests examples documentation markdown
 ;; Homepage: https://github.com/emacsfodder/etd
-;; Package-Requires: ((emacs "24.3"))
+;; Package-Requires: ((emacs "24.1"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -26,7 +26,11 @@
 ;; ## Usage:
 ;;
 ;; The easiest way to understand how to use `etd' is to check out
-;; `kurecolor-examples.el' in this folder.  TODO: Do better than this.
+;; `etd-examples.el' in this folder.
+;;
+;; ### Generate tests
+;;
+;;
 ;;
 ;;; Code:
 
@@ -43,46 +47,50 @@
         (require 'cl-lib)))
    (require 'cl-lib)))
 
-(defvar etd-testing t "When set to t run tests, when set to nil generate documents.")
-(defvar functions '() "Collected functions.")
+(defvar etd--testing t "When set to t run tests, when set to nil generate documents.")
+(defvar etd--doc-fns '() "Functions to collected for documentation.")
 
-(defun examples-to-should-1 (examples)
-  "Create one `should' from EXAMPLES."
-  (let ((actual (car examples))
-        (expected (nth 2 examples)))
-    `(let ((previous-match-data (match-data)))
-       (should (equal-including-properties ,actual ,expected))
-       (should (equal (match-data) previous-match-data)))))
+(defun example-to-should-1 (example)
+  "Create a `should' case from the EXAMPLE."
+  (let ((actual (car example))
+        (expected (nth 2 example)))
+    `(should (equal ,actual ,expected))))
 
 (defun examples-to-should (examples)
-  "Create `should' for all EXAMPLES."
-  (let (result)
-    (while examples
-      (setq result (cons (examples-to-should-1 examples) result))
-      (setq examples (cdr (cddr examples))))
-    (nreverse result)))
+  "Create `should' cases for each of the EXAMPLES."
+  (cl-reduce (lambda (results example) (cons (examples-to-should-1 example))) examples))
 
 (defmacro defexamples (cmd &rest examples)
-  "CMD and EXAMPLES to ert-deftests."
+  "CMD and EXAMPLES to ert-deftests.
+
+See etd-demonstration.el"
   (declare (indent 1))
-  (if etd-testing
+  (if etd--testing
 
    `(ert-deftest ,cmd ()
       ,@(examples-to-should examples))
 
-   `(add-to-list 'functions (list
-                             ',cmd
-                             (docs--signature (symbol-function ',cmd))
-                             (docs--docstring (symbol-function ',cmd))
-                             (examples-to-strings ',examples)))))
+   `(add-to-list 'etd--doc-fns (list
+                                ',cmd
+                                (docs--signature (symbol-function ',cmd))
+                                (docs--docstring (symbol-function ',cmd))
+                                (examples-to-strings ',examples)))))
 
 (defmacro def-example-group (group &rest examples)
-  "GROUP of EXAMPLES for docs."
+  "Define a GROUP (string) of EXAMPLES for docs.
+
+GROUP is used to generate a group heading.
+
+EXAMPLES are any number of `defexamples'.
+
+See etd-demonstration.el"
   (declare (indent 1))
-  (if etd-testing
+  (if etd--testing
+
       `(progn ,@examples)
+
    `(progn
-      (add-to-list 'functions ,group)
+      (add-to-list 'etd--doc-fns ,group)
       ,@examples)))
 
 (defun example-to-string (example)
@@ -204,31 +212,30 @@
 
 (defun create-docs-file (template readme)
   "Create README from TEMPLATE."
-  (interactive "fSelect Template: \nFSelect README.md file: ")
-  (let ((functions (nreverse functions)))
+  (let ((etd--doc-fns (nreverse etd--doc-fns)))
     (with-temp-file readme
      (insert-file-contents-literally template)
      (goto-and-remove "[[ function-list ]]")
-     (insert (mapconcat 'function-summary functions "\n"))
+     (insert (mapconcat 'function-summary  etd--doc-fns "\n"))
      (goto-and-remove "[[ function-docs ]]")
-     (insert (mapconcat 'function-to-md functions "\n"))
+     (insert (mapconcat 'function-to-md etd--doc-fns "\n"))
      (simplify-quotes))))
 
 (defun create-docs-file-for-buffer (template readme)
   "Create README from TEMPLATE."
   (interactive "fSelect Template: \nFSelect README.md file: ")
-  (setq etd-testing nil)
-  (setq functions '())
+  (setq etd--testing nil)
+  (setq etd--doc-fns '())
   (eval-buffer)
   (create-docs-file template readme)
-  (setq etd-testing t)
+  (setq etd--testing t)
   (eval-buffer))
 
 (defun create-docs-file-for (examples-file template readme)
   "Using EXAMPLES-FILE and TEMPLATE create README."
   (interactive "fSelect Examples file: \nfSelect Template: \nFSelect README.md file: ")
-  (setq etd-testing nil)
-  (setq functions '())
+  (setq etd--testing nil)
+  (setq etd--doc-fns '())
   (load-file examples-file)
   (create-docs-file template readme))
 
