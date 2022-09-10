@@ -7,7 +7,7 @@
 ;; Maintainer: Jason Milkins <jasonm23@gmail.com>
 ;; Created: August 18, 2022
 ;; Modified: August 18, 2022
-;; Version: 0.0.1
+;; Version: 2.0.0
 ;; Keywords: examples tests documentation.
 ;; Homepage: https://github.com/emacsfodder/etd
 ;; Package-Requires: ((emacs "24.1"))
