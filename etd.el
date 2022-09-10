@@ -293,8 +293,7 @@ Floating point correspondents will be approximated by
   (delete-char (- (length s))))
 
 (defun etd--create-docs-file (template readme)
-  "Create README from TEMPLATE."
-  (interactive "fSelect Template: \nFSelect README.md file: ")
+  "Create README from TEMPLATE internal func."
   (let ((etd--functions (nreverse etd--functions)))
     (with-temp-file readme
      (insert-file-contents-literally template)
