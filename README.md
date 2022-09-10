@@ -84,6 +84,27 @@ Because ETD is compatible with ERT and uses the same test runner, we recommend c
 
 # Generate Docs
 
+## Template
+
+An ETD template file is a text/markdown file. It should contain two placeholders, 
+
+```
+[[ function-summary ]]
+```
+
+Which will be replaced by the list of function signatures (name + args).
+Each one links to the full function entry in the `[[ function-list ]]`.
+
+``` 
+[[ function-list ]]
+```
+ 
+Which will be replaced by the list of function entries. Each one includes function signature, docstring (formatted for markdown) and the top three examples, make those top 3 good examples.
+
+[See etd-example-template](./etd-examples-template)
+
+## Commands to generate docs...
+
 To generate docs use these commands.
 
 ```
@@ -96,16 +117,7 @@ M-x etd-create-docs-file-for
 ```
 This prompts for an elisp file with etd examples, a readme template and a readme markdown target.
 
-# Template
-
-An ETD template file is a text/markdown file. It should contain two placeholders, 
-
-1. `[[ function-summary ]]`
-  - A list of function signatures (name + args), each links to the full function entry in the function-list.
-1. `[[ function-list ]]`
-  - A list of function definitions, including the function signature, the docstring and the top three examples, so make at least 3 good examples for each function. 
-
-## Projects using ETD
+# Projects using ETD
 
 [Kurecolor](https://github.com/emacsfodder/kurecolor) has a suite of examples here:
 
