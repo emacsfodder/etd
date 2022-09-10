@@ -5,8 +5,8 @@
 ;; Author: Jason M23 <jasonm23@gmail.com>
 ;;
 ;; Created: August 14, 2022
-;; Modified: August 14, 2022
-;; Version: 1.4.5
+;; Modified: September 10, 2022
+;; Version: 2.0.0
 ;; Keywords: lisp tools extensions
 ;;
 ;; Homepage: https://github.com/emacsfodder/kurecolor
