@@ -1,5 +1,7 @@
 # etd - **E**xamples **T**ests **D**ocs
 
+![ETD-illustration](https://user-images.githubusercontent.com/71587/189462058-97b3d2df-fb06-48c0-af76-abc7c20e37d1.png)
+
 Derived from the test/docs functions/macros in [magnars/s.e](https://github.com/magnars/s.el) library.
 
 ETD allows the simple writing of examples as tests and generation of
