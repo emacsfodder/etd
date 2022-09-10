@@ -11,22 +11,7 @@ A prototype of this package is dogfooding in https://github.com/emacsfodder/kure
 
 ## Usage:
 
-ETD provides 2 macros...
-
-Let's test a function....
-
-### defexample (function examples)
-
-```
-(defexamples kurecolor-clamp
-  (kurecolor-clamp 1 -1 2)  => 1
-  (kurecolor-clamp -2 -1 2) => -1
-  (kurecolor-clamp 4 -1 2)  => 2)
-```
-
-These can be grouped...
-
-### def-example-group (name defexamples)
+ETD provides 2 macros `def-example-group` and  `defexamples` which can be grouped.
 
 ```
 (def-example-group "Kurecolor"
@@ -75,6 +60,21 @@ Can be simplified to:
 The `defexample` macro creates/evaluates to `ert-deftests` / `should` expectation tests.  
 
 Run them selectively with `M-x ert` (or use `M-x ert-run-all-tests` to run all the tests.)
+
+### Batch mode Emacs
+
+To run the tests from the terminal or using a CI, ETD uses the standard method for any ERT suite. Assuming a project has `examples.el` (which includes `(require 'etd)`) the simplest command would be.
+
+```
+emacs --batch -l path-to/examples.el -f ert-run-all-tests-batch-and-exit
+```
+If `etd` is not in the Emacs `load-path` you can do:
+
+```
+emacs --batch -l path-to/etd.el -l path-to/examples.el -f ert-run-all-tests-batch-and-exit
+```
+
+For an example using github workflows CI, [see Kurecolor's workflow](https://github.com/emacsfodder/kurecolor/blob/master/.github/workflows/kurecolor-tests.yml) and [scripts](https://github.com/emacsfodder/kurecolor/tree/master/bin)
 
 # Advanced usage:
 
