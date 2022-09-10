@@ -103,6 +103,8 @@ Which will be replaced by the list of function entries. Each one includes functi
 
 [See etd-example-template](./etd-examples-template)
 
+[Docs generated for Kurecolor](https://emacsfodder.github.io/kurecolor/)
+
 ## Commands to generate docs...
 
 To generate docs use these commands.
