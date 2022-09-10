@@ -44,9 +44,19 @@
         (require 'cl-lib)))
    (require 'cl-lib)))
 
+(defvar etd-float-precision 0.0001)
+(defvar etd-function-to-md-template
+  "### %s %s
+
+%s
+
+```lisp
+%s
+```
+")
+
 (defvar etd--testing t "When set to t run tests, when set to nil generate documents.")
 (defvar etd--functions '() "Collected functions.")
-(defvar etd--float-precision 0.0001)
 
 (defun etd--zip (x y)
   "Zip lists X & Y together as a list of cons cells."
@@ -88,13 +98,13 @@
 In `defexamples' use the form  `X ~> Y'.
 
 Floating point correspondents will be approximated by
-`etd--float-precision'"
+`etd-float-precision'"
   (or (= x y)
       (equal x y)
       (and (floatp x) (floatp y)
            (< (/ (abs (- x y))
                  (max (abs x) (abs y)))
-              etd--float-precision))))
+              etd-float-precision))))
 
 (defun etd--lists-approx-equal (x y)
   "Test approximate equality of lists of numbers.
@@ -102,7 +112,7 @@ Floating point correspondents will be approximated by
 In `defexamples' use the from  `X ~> Y'.
 
 Floating point correspondents will be approximated by
-`etd--float-precision'"
+`etd-float-precision'"
    (and (etd--listsp x y)
     (and (etd--length= x y))
     (and (etd--compare-flat-lists x y 'etd--approx-equal))))
@@ -210,16 +220,6 @@ Floating point correspondents will be approximated by
             "\\b\\([A-Z][A-Z0-9-]*\\)\\b"
             'etd--quote-and-downcase
             docstring t)))))))
-
-(defvar etd-function-to-md-template
-  "### %s %s
-
-%s
-
-```lisp
-%s
-```
-")
 
 (defun etd--function-to-md (function)
   "FUNCTION to markdown."
