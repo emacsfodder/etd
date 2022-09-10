@@ -1,6 +1,6 @@
 # etd - **E**xamples **T**ests **D**ocs
 
-![ETD-illustration](https://user-images.githubusercontent.com/71587/189462058-97b3d2df-fb06-48c0-af76-abc7c20e37d1.png)
+![ETD-illustration](https://user-images.githubusercontent.com/71587/189462116-6405d85c-ff23-4c3f-adc4-5e326ab7970c.png)
 
 Derived from the test/docs functions/macros in [magnars/s.e](https://github.com/magnars/s.el) library.
 
