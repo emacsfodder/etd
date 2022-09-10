@@ -7,7 +7,7 @@ Derived from the test/docs functions/macros in [magnars/s.e](https://github.com/
 ETD allows the simple writing of examples as tests and generation of
 markdown documents for both functions and examples.
 
-A prototype of this package is dogfooding in https://github.com/emacsfodder/kurecolor. 
+It generates tests using Emacs Regression Testing (ERT) so it can be used alongside a standard ert suite.
 
 ## Usage:
 
