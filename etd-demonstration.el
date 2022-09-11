@@ -1,6 +1,6 @@
 ;;; etd-demonstration.el --- Demonstration of ETD
-;; -*- lexical-binding: t; eval: (font-lock-add-keywords nil '(("defexamples\\|def-example-group\\| => " (0 'font-lock-keyword-face)))); -*-
-;;
+;; -*- lexical-binding: t; no-byte-compile: t; eval: (font-lock-add-keywords nil '(("defexamples\\|def-example-group\\| => " (0 'font-lock-keyword-face)))); -*-
+;; 
 ;; Copyright (C) 2022 Jason Milkins
 ;;
 ;; Author: Jason Milkins <jasonm23@gmail.com>
