@@ -1,5 +1,5 @@
 ;;; etd-demonstration.el --- Demonstration of ETD
-;; -*- lexical-binding: t; no-byte-compile: t; eval: (font-lock-add-keywords nil '(("defexamples\\|def-example-group\\| => " (0 'font-lock-keyword-face)))); -*-
+;; -*- lexical-binding: t; no-byte-compile: t; eval: (font-lock-add-keywords nil '(("examples\\|group\\| => " (0 'font-lock-keyword-face)))); -*-
 ;; 
 ;; Copyright (C) 2022 Jason Milkins
 ;;
@@ -25,6 +25,9 @@
 ;; Example Demonstration:
 ;;; - - -
 
+(defalias 'group #'etd-group)
+(defalias 'examples #'etd-examples)
+
 ;;;; Function under test.
 (defun example-func-1 (string)
   "Return a copy of STRING."
@@ -34,14 +37,14 @@
   "Return a reversed copy of STRING."
   (reverse string))
 
-;;; (def-example-group: GROUP &rest EXAMPLES)
-(def-example-group "ETD example 1"
+;;; (group: NAME &rest EXAMPLES)
+(group "ETD example 1"
 
- (defexamples example-func-1
+ (examples example-func-1
    (example-func-1 "abc") => "abc"
    (example-func-1 "cba") => "cba")
 
- (defexamples example-func-2
+ (examples example-func-2
    (example-func-2 "abc") => "cba"))
 
 (provide 'etd-demonstration)

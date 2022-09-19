@@ -13,11 +13,11 @@ It generates tests using Emacs Regression Testing (ERT) so it can be used alongs
 
 ## Usage:
 
-ETD provides 2 macros `def-example-group` and  `defexamples` which can be grouped.
+ETD provides 2 macros `etd-group` and  `etd-examples` which can be grouped.
 
 ```
-(def-example-group "Kurecolor"
-  (defexamples kurecolor-clamp
+(etd-group "Kurecolor"
+  (etd-examples kurecolor-clamp
     (kurecolor-clamp 1 -1 2)  => 1
     (kurecolor-clamp -2 -1 2) => -1
     (kurecolor-clamp 4 -1 2)  => 2))
@@ -59,7 +59,7 @@ Can be simplified to:
 
 # Run the tests.
 
-The `defexample` macro creates/evaluates to `ert-deftests` / `should` expectation tests.  
+The `etd-examples` macro creates/evaluates to `ert-deftests` / `should` expectation tests.  
 
 Run them selectively with `M-x ert` (or use `M-x ert-run-all-tests` to run all the tests.)
 
@@ -82,7 +82,7 @@ For an example using github workflows CI, [see Kurecolor's workflow](https://git
 
 ## Mocking and error checking tests.
 
-Because ETD is compatible with ERT and uses the same test runner, we recommend composing advanced tests wit `ert-deftest` and using the the matchers from [`ert-expectations`](https://github.com/emacsorphanage/ert-expectations) (which uses [`el-mock`](https://github.com/rejeep/el-mock.el))
+Because ETD is compatible with ERT and uses the same test runner, it's recommended that advanced tests that require mocking, or error handling use `ert-deftest` and the extensive/convenient matchers from [`ert-expectations`](https://github.com/emacsorphanage/ert-expectations) (which in turn, uses [`el-mock`](https://github.com/rejeep/el-mock.el) for mocking.)
 
 # Generate Docs
 

@@ -95,9 +95,9 @@
 (defun etd--approx-equal (x y)
   "Test approximate equality.
 
-In `defexamples' use the form  `X ~> Y'.
+In `etd-examples' use the form  `X ~> Y'.
 
-Floating point correspondents will be approximated by
+Corresponding floating points will be approximated by
 `etd-float-precision'"
   (or (= x y)
       (equal x y)
@@ -107,11 +107,11 @@ Floating point correspondents will be approximated by
               etd-float-precision))))
 
 (defun etd--lists-approx-equal (x y)
-  "Test approximate equality of lists of numbers.
+  "Test approximate equality of X and Y, lists of floating point numbers.
 
-In `defexamples' use the from  `X ~> Y'.
+In `etd-examples' use the from  `X ~> Y'.
 
-Floating point correspondents will be approximated by
+Corresponding floating points will be approximated by
 `etd-float-precision'"
    (and (etd--listsp x y)
     (and (etd--length= x y))
@@ -155,7 +155,7 @@ Floating point correspondents will be approximated by
                                   (etd--docs--docstring (symbol-function ',cmd))
                                   (etd--examples-to-strings ',examples)))))
 
-(defmacro etd-example-group (group &rest examples)
+(defmacro etd-group (group &rest examples)
   "GROUP of EXAMPLES for docs."
   (declare (indent 1))
   (if etd--testing

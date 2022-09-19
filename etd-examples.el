@@ -1,4 +1,4 @@
-;;; etd-examples.el --- Tests for E.T.D. -*- lexical-binding: t; no-byte-compile: t; eval: (font-lock-add-keywords nil '(("examples\\|def-example-group\\| => " (0 'font-lock-keyword-face)))); -*-
+;;; etd-examples.el --- Tests for E.T.D. -*- lexical-binding: t; no-byte-compile: t; eval: (font-lock-add-keywords nil '(("examples\\|group\\| => " (0 'font-lock-keyword-face)))); -*-
 ;;
 ;; Copyright (C) 2022 Jason Milkins
 ;;
@@ -21,7 +21,7 @@
 
 (require 'etd)
 
-(defalias 'group #'etd-example-group)
+(defalias 'group #'etd-group)
 (defalias 'examples #'etd-examples)
 
 ;;;; Example Function.
