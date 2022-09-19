@@ -141,7 +141,7 @@ Floating point correspondents will be approximated by
       (setq examples (cdr (cddr examples))))
     (nreverse result)))
 
-(defmacro defexamples (cmd &rest examples)
+(defmacro etd-examples (cmd &rest examples)
   "CMD and EXAMPLES to ert-deftests."
   (declare (indent 1))
   (if etd--testing
@@ -155,7 +155,7 @@ Floating point correspondents will be approximated by
                                   (etd--docs--docstring (symbol-function ',cmd))
                                   (etd--examples-to-strings ',examples)))))
 
-(defmacro def-example-group (group &rest examples)
+(defmacro etd-example-group (group &rest examples)
   "GROUP of EXAMPLES for docs."
   (declare (indent 1))
   (if etd--testing

@@ -1,5 +1,4 @@
-;;; etd-examples.el --- Tests for E.T.D.
-;; -*- lexical-binding: t; no-byte-compile: t; eval: (font-lock-add-keywords nil '(("defexamples\\|def-example-group\\| => " (0 'font-lock-keyword-face)))); -*-
+;;; etd-examples.el --- Tests for E.T.D. -*- lexical-binding: t; no-byte-compile: t; eval: (font-lock-add-keywords nil '(("examples\\|def-example-group\\| => " (0 'font-lock-keyword-face)))); -*-
 ;;
 ;; Copyright (C) 2022 Jason Milkins
 ;;
@@ -22,6 +21,9 @@
 
 (require 'etd)
 
+(defalias 'group #'etd-example-group)
+(defalias 'examples #'etd-examples)
+
 ;;;; Example Function.
 (defun example-func (string)
   "Return a reversed copy of STRING."
@@ -29,12 +31,12 @@
 
 ;; ETD testing ...
 
-(def-example-group "Documentation Helper Functions"
- (defexamples etd--first-three
+(group "Documentation Helper Functions"
+ (examples etd--first-three
   (etd--first-three '("one" "two" "three" "four" "five")) => '("one" "two" "three")
   (etd--first-three '(1 2 3 4 5)) => '(1 2 3))
 
- (defexamples etd--function-to-md
+ (examples etd--function-to-md
   (etd--function-to-md
    '(example-func (string) "Return a reversed copy of STRING." ("(example-func \"abc\") => \"cba\"")))
   => "### example-func `(string)`
@@ -46,21 +48,19 @@ Return a reversed copy of `string`.
 ```
 ")
 
- (defexamples etd--function-summary
+ (examples etd--function-summary
   (etd--function-summary '(first-three (list) ((first-three '("one" "two" "three" "four" "five")))
                            ⇒ '("one" "two" "three")
                            (first-three '(1 2 3 4 5))
                            ⇒ '(1 2 3)))
   => "* [first-three](#first-three-list) `(list)`")
 
- ()
-
- (defexamples etd--github-id
+ (examples etd--github-id
    (etd--github-id "foobzz" "(string &optional arg)") => "-foobzz-string-optional-arg"
    (etd--github-id "foobar" "(string list)") => "-foobar-string-list"
    (etd--github-id "foobaz" "(string &rest args)") => "-foobaz-string-rest-args")
 
- (defexamples etd--docs--chop-suffix
+ (examples etd--docs--chop-suffix
    (etd--docs--chop-suffix "Boom" "BigBaddaBoom") => "BigBadda"
    (etd--docs--chop-suffix "////" "BigBaddaBoom////") => "BigBaddaBoom"
    (etd--docs--chop-suffix "Badda" "BigBaddaBoom") => "BigBaddaBoom"))
