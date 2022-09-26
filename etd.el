@@ -39,7 +39,7 @@
 (eval-when-compile
  (if (= 24 emacs-major-version)
      (progn
-      (require 'cl-libify)
+      (require 'cl)
       (when (locate-library "cl-lib")
         (require 'cl-lib)))
    (require 'cl-lib)))
