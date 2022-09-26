@@ -21,6 +21,8 @@ $("$EMACS" --version)
 ════════════════════════════════════════════════════════════════════════════════
 INFO
 
+mv etd-examples.el.examlpe etd-examples.el
+
 "$EMACS" --batch \
   -eval "(add-to-list 'load-path \".\")" \
   -l ert \

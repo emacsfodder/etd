@@ -39,7 +39,7 @@
 (eval-when-compile
  (if (= 24 emacs-major-version)
      (progn
-      (require 'cl)
+      (require 'cl-libify)
       (when (locate-library "cl-lib")
         (require 'cl-lib)))
    (require 'cl-lib)))
@@ -115,7 +115,7 @@ Corresponding floating points will be approximated by
 `etd-float-precision'"
    (and (etd--listsp x y)
     (and (etd--length= x y))
-    (and (etd--compare-flat-lists x y 'etd--approx-equal))))
+    (and (etd--compare-flat-lists x y #'etd--approx-equal))))
 
 (defun etd--example-to-test (cmd idx example)
   "Create one `ert-deftest' from CMD, IDX and EXAMPLE."
@@ -149,11 +149,11 @@ Corresponding floating points will be approximated by
    `(progn
      ,@(etd--examples-to-tests cmd examples))
 
-   `(add-to-list 'etd--functions (list
-                                  ',cmd
-                                  (etd--docs--signature (symbol-function ',cmd))
-                                  (etd--docs--docstring (symbol-function ',cmd))
-                                  (etd--examples-to-strings ',examples)))))
+   `(add-to-list #'etd--functions (list
+                                   #',cmd
+                                   (etd--docs--signature (symbol-function #',cmd))
+                                   (etd--docs--docstring (symbol-function #',cmd))
+                                   (etd--examples-to-strings #',examples)))))
 
 (defmacro etd-group (group &rest examples)
   "GROUP of EXAMPLES for docs."
@@ -161,7 +161,7 @@ Corresponding floating points will be approximated by
   (if etd--testing
       `(progn ,@examples)
    `(progn
-      (add-to-list 'etd--functions ,group)
+      (add-to-list #'etd--functions ,group)
       ,@examples)))
 
 (defun etd--example-to-string (example)
@@ -218,7 +218,7 @@ Corresponding floating points will be approximated by
            "`\\1`"
            (replace-regexp-in-string
             "\\b\\([A-Z][A-Z0-9-]*\\)\\b"
-            'etd--quote-and-downcase
+            #'etd--quote-and-downcase
             docstring t)))))))
 
 (defun etd--function-to-md (function)
@@ -233,7 +233,7 @@ Corresponding floating points will be approximated by
               command-name
               (if signature (format "`%s`" signature) "")
               docstring
-              (mapconcat 'identity (etd--first-three examples) "\n")))))
+              (mapconcat #'identity (etd--first-three examples) "\n")))))
 
 (defun etd--docs--chop-suffix (suffix s)
   "Remove SUFFIX from S."
@@ -247,7 +247,14 @@ Corresponding floating points will be approximated by
   "Generate GitHub ID for COMMAND-NAME and SIGNATURE."
   (etd--docs--chop-suffix
    "-"
-   (replace-regexp-in-string "[^a-zA-Z0-9-]+" "-" (format "%S %S" command-name (if signature signature "")))))
+   (replace-regexp-in-string
+    "[^a-zA-Z0-9-]+"
+    "-"
+    (format "%S %S"
+            command-name
+            (if signature
+                signature
+              "")))))
 
 (defun etd--function-summary (function)
   "Create a markdown summary of FUNCTION."
