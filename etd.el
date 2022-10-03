@@ -32,17 +32,7 @@
 ;;; Code:
 
 (require 'ert)
-
-(unless (>= emacs-major-version 24)
-  (error "Requires Emacs 24.1 or later"))
-
-(eval-when-compile
- (if (= 24 emacs-major-version)
-     (progn
-      (require 'cl)
-      (when (locate-library "cl-lib")
-        (require 'cl-lib)))
-   (require 'cl-lib)))
+(require 'cl-lib)
 
 (defvar etd-float-precision 0.0001)
 (defvar etd-function-to-md-template
@@ -305,9 +295,9 @@ Corresponding floating points will be approximated by
     (with-temp-file readme
      (insert-file-contents-literally template)
      (etd--goto-and-remove "[[ function-list ]]")
-     (insert (mapconcat 'etd--function-summary etd--functions "\n"))
+     (insert (mapconcat #'etd--function-summary etd--functions "\n"))
      (etd--goto-and-remove "[[ function-docs ]]")
-     (insert (mapconcat 'etd--function-to-md etd--functions "\n"))
+     (insert (mapconcat #'etd--function-to-md etd--functions "\n"))
      (etd--simplify-quotes))))
 
 (defun etd-create-docs-file-for-buffer (template readme)
