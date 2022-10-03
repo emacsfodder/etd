@@ -11,6 +11,7 @@
 ;;
 ;; Homepage: https://github.com/emacsfodder/kurecolor
 ;; Package-Requires: ((emacs "24.4"))
+;; License: GPL-3.0
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
