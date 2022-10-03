@@ -21,13 +21,11 @@ $("$EMACS" --version)
 ════════════════════════════════════════════════════════════════════════════════
 INFO
 
-mv etd-examples.el.example etd-examples.el
-
 "$EMACS" --batch \
   -eval "(add-to-list 'load-path \".\")" \
   -l ert \
   -l etd.el \
-  -l etd-examples.el \
+  -l examples/etd-examples.el \
   --eval "(ert-run-tests-batch-and-exit)"
 exitcode=$?
 
