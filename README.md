@@ -91,14 +91,14 @@ Because ETD is compatible with ERT and uses the same test runner, it's recommend
 An ETD template file is a text/markdown file. It should contain two placeholders, 
 
 ```
-[[ function-summary ]]
+[[ function-list ]]
 ```
 
 Which will be replaced by the list of function signatures (name + args).
-Each one links to the full function entry in the `[[ function-list ]]`.
+Each one links to the full function entry in the `[[ function-docs ]]`.
 
 ``` 
-[[ function-list ]]
+[[ function-docs ]]
 ```
  
 Which will be replaced by the list of function entries. Each one includes function signature, docstring (formatted for markdown) and the top three examples, make those top 3 good examples.
