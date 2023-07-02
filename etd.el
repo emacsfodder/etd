@@ -175,16 +175,15 @@ Corresponding floating points will be approximated by
 (defun etd--get-function-info (function-name)
   "Retrieve the name, arguments and docstring of FUNCTION-NAME."
   (let ((function-object (symbol-function function-name)))
-    (seq-filter (lambda (i) i)
-      (pcase function-object
-        (`(lambda ,args ,docstring ,_)
-         (list function-name args docstring))
-        (`(closure ,_ ,args ,docstring ,_)
-         (list function-name args docstring))
-        (`(macro closure ,_ ,args ,docstring ,_)
-         (list function-name args docstring))
-        (`(macro lambda ,args ,docstring ,_)
-         (list function-name args docstring))))))
+    (pcase function-object
+      (`(lambda ,args ,docstring ,_)
+       (list function-name args docstring))
+      (`(closure ,_ ,args ,docstring ,_)
+       (list function-name args docstring))
+      (`(macro closure ,_ ,args ,docstring ,_)
+       (list function-name args docstring))
+      (`(macro lambda ,args ,docstring ,_)
+       (list function-name args docstring)))))
 
 (defun etd--quote-and-downcase (str)
   "Wrap STR in backquotes for markdown."
