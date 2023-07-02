@@ -25,9 +25,9 @@
 (defalias 'examples #'etd-examples)
 
 ;;;; Example Function.
-(defun example-func (string)
+(defun example-func (str)
   "Return a reversed copy of STRING."
-  (reverse string))
+  (reverse str))
 
 ;; ETD testing ...
 
@@ -36,24 +36,10 @@
   (etd--first-three '("one" "two" "three" "four" "five")) => '("one" "two" "three")
   (etd--first-three '(1 2 3 4 5)) => '(1 2 3))
 
- (examples etd--function-to-md
-  (etd--function-to-md
-   '(example-func (string) "Return a reversed copy of STRING." ("(example-func \"abc\") => \"cba\"")))
-  => "### example-func `(string)`
-
-Return a reversed copy of `string`.
-
-```lisp
-(example-func \"abc\") => \"cba\"
-```
-")
-
  (examples etd--function-summary
-  (etd--function-summary '(first-three (list) ((first-three '("one" "two" "three" "four" "five")))
-                           ⇒ '("one" "two" "three")
-                           (first-three '(1 2 3 4 5))
-                           ⇒ '(1 2 3)))
-  => "* [first-three](#first-three-list) `(list)`")
+   (etd--function-summary
+     (etd--get-function-info 'etd--first-three)
+    => "\n* [first-three](#first-three-list) `(example-list)`"))
 
  (examples etd--github-id
    (etd--github-id "foobzz" "(string &optional arg)") => "-foobzz-string-optional-arg"

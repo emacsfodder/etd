@@ -136,15 +136,10 @@ Corresponding floating points will be approximated by
   "CMD and EXAMPLES to ert-deftests."
   (declare (indent 1))
   (if etd--testing
-
-   `(progn
-     ,@(etd--examples-to-tests cmd examples))
-
-   `(add-to-list #'etd--functions (list
-                                   #',cmd
-                                   (etd--docs--signature (symbol-function #',cmd))
-                                   (etd--docs--docstring (symbol-function #',cmd))
-                                   (etd--examples-to-strings #',examples)))))
+      `(progn
+        ,@(etd--examples-to-tests cmd examples))
+   `(add-to-list #'etd--functions (list (etd--get-function-info #',cmd)
+                                    (etd--examples-to-strings #',examples)))))
 
 (defmacro etd-group (group &rest examples)
   "GROUP of EXAMPLES for docs."
@@ -177,21 +172,23 @@ Corresponding floating points will be approximated by
       (setq examples (cdr (cddr examples))))
     (nreverse result)))
 
-(defun etd--docs--signature (cmd)
-  "Get function signature for CMD."
-  (if (eq 'macro (car cmd))
-      (nth 2 cmd)
-    (cadr cmd)))
+(defun etd--get-function-info (function-name)
+  "Retrieve the name, arguments and docstring of FUNCTION-NAME."
+  (let ((function-object (symbol-function function-name)))
+    (seq-filter (lambda (i) i)
+      (pcase function-object
+        (`(lambda ,args ,docstring ,_)
+         (list function-name args docstring))
+        (`(closure ,_ ,args ,docstring ,_)
+         (list function-name args docstring))
+        (`(macro closure ,_ ,args ,docstring ,_)
+         (list function-name args docstring))
+        (`(macro lambda ,args ,docstring ,_)
+         (list function-name args docstring))))))
 
-(defun etd--docs--docstring (cmd)
-  "Get docstring for CMD."
-  (if (eq 'macro (car cmd))
-      (nth 3 cmd)
-    (nth 2 cmd)))
-
-(defun etd--quote-and-downcase (string)
-  "Wrap STRING in backquotes for markdown."
-  (format "`%s`" (downcase string)))
+(defun etd--quote-and-downcase (str)
+  "Wrap STR in backquotes for markdown."
+   (format "`%s`" (downcase str)))
 
 (defun etd--quote-docstring (docstring)
   "Quote DOCSTRING."
@@ -212,19 +209,34 @@ Corresponding floating points will be approximated by
             #'etd--quote-and-downcase
             docstring t)))))))
 
-(defun etd--function-to-md (function)
-  "FUNCTION to markdown."
-  (if (stringp function)
-      ""
-    (let ((command-name (car function))
-          (signature (cadr function))
-          (docstring (etd--quote-docstring (nth 2 function)))
-          (examples (nth 3 function)))
+(defun etd--function-summary (fn-info)
+  "Create a markdown summary of FN-INFO."
+  (if (stringp fn-info)
+      (format "\n### %s \n" fn-info)
+    (let* ((cmd (car fn-info))
+           (command-name (car cmd))
+           (signature (cadr cmd)))
+      (format "* [%s](#%s) %s"
+              command-name
+              (etd--github-id command-name signature)
+              (if signature (format "`%s`" signature) "")))))
+
+(defun etd--function-info-to-md (fn-info)
+  "FN-INFO to markdown."
+  (if (stringp fn-info)
+      (format "\n### %s \n" fn-info)
+    (let* ((cmd (car fn-info))
+           (command-name (car cmd))
+           (signature (or (format "`%s`" (nth 1 cmd)) ""))
+           (docstring (etd--quote-docstring (nth 2 cmd)))
+           (fn-examples (cadr fn-info)))
       (format etd-function-to-md-template
               command-name
-              (if signature (format "`%s`" signature) "")
+              signature
               docstring
-              (mapconcat #'identity (etd--first-three examples) "\n")))))
+              (mapconcat 'identity
+                         (etd--first-three fn-examples)
+                         "\n")))))
 
 (defun etd--docs--chop-suffix (suffix s)
   "Remove SUFFIX from S."
@@ -247,27 +259,15 @@ Corresponding floating points will be approximated by
                 signature
               "")))))
 
-(defun etd--function-summary (function)
-  "Create a markdown summary of FUNCTION."
-  (if (stringp function)
-      (concat "\n### " function "\n")
-    (let ((command-name (car function))
-          (signature (cadr function)))
-      (format "* [%s](#%s) %s"
-              command-name
-              (etd--github-id command-name signature)
-              (if signature (format "`%s`" signature) "")))))
-
-(defun etd--first-three (list)
-  "Select first 3 examples from LIST."
-  (let (first)
-    (when (car list)
-      (setq first (cons (car list) first))
-      (when (cadr list)
-        (setq first (cons (cadr list) first))
-        (when (nth 2 list)
-          (setq first (cons (nth 2 list) first)))))
-    (nreverse first)))
+(defun etd--first-three (example-list)
+  "Select first 3 examples from EXAMPLE-LIST."
+    (pcase example-list
+     (`(,first ,second ,third . ,_)
+      (list first second third))
+     (`(,first ,second . ,_)
+      (list first second))
+     (`(,first . ,_)
+      (list first))))
 
 (defun etd--simplify-quotes ()
   "Simplify quotes in buffer."
@@ -298,7 +298,7 @@ Corresponding floating points will be approximated by
      (etd--goto-and-remove "[[ function-list ]]")
      (insert (mapconcat #'etd--function-summary etd--functions "\n"))
      (etd--goto-and-remove "[[ function-docs ]]")
-     (insert (mapconcat #'etd--function-to-md etd--functions "\n"))
+     (insert (mapconcat #'etd--function-info-to-md etd--functions "\n"))
      (etd--simplify-quotes))))
 
 (defun etd-create-docs-file-for-buffer (template readme)
@@ -318,6 +318,14 @@ Corresponding floating points will be approximated by
   (setq etd--functions '())
   (load-file examples-file)
   (etd--create-docs-file template readme))
+
+(defun etd-debug-examples (examples-file)
+  "List the functions tested in EXAMPLES-FILE."
+  (interactive "fSelect Examples file: ")
+  (setq etd--testing nil)
+  (setq etd--functions '())
+  (load-file examples-file)
+  (mapcar 'print (reverse etd--functions)))
 
 (provide 'etd)
 ;;; etd.el ends here
