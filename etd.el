@@ -1,12 +1,12 @@
 ;;; etd.el --- Examples to Tests and Docs -*- lexical-binding: t; -*-
 ;;
-;; Copyright (C) 2022 Jason M23
+;; Copyright (C) 2023 Jason M23
 ;;
 ;; Author: Jason M23 <jasonm23@gmail.com>
 ;;
 ;; Created: August 14, 2022
 ;; Modified: September 10, 2022
-;; Version: 2.0.0
+;; Version: 2.1.0
 ;; Keywords: lisp tools extensions
 ;;
 ;; Homepage: https://github.com/emacsfodder/kurecolor
