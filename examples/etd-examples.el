@@ -51,6 +51,12 @@
     (etd--docs--chop-suffix "////" "BigBaddaBoom////") => "BigBaddaBoom"
     (etd--docs--chop-suffix "Badda" "BigBaddaBoom") => "BigBaddaBoom")
 
+  (examples etd--get-function-info
+    (etd--get-function-info 'etd--quote-and-downcase) => '(etd--quote-and-downcase (str) "Wrap STR in backquotes for markdown.")
+    (etd--get-function-info 'etd-examples) => '(etd-examples (cmd &rest examples) "CMD and EXAMPLES to ert-deftests.")
+    (etd--get-function-info 'insert) => nil
+    (etd--get-function-info 'etd-group) => '(etd-group (group &rest examples) "GROUP of EXAMPLES for docs."))
+
   (examples etd--quote-and-downcase
     (etd--quote-and-downcase "STRING") => " `string` ")
 

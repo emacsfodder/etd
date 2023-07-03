@@ -179,7 +179,11 @@ Corresponding floating points will be approximated by
     (nreverse result)))
 
 (defun etd--get-function-info (function-name)
-  "Retrieve the name, arguments and docstring of FUNCTION-NAME."
+  "Retrieve the name, arguments and docstring of FUNCTION-NAME.
+
+Used internally to collate functions for documentation.
+
+Note, this is only useful for user defined functions/macros."
   (let ((function-object (symbol-function function-name)))
     (pcase function-object
       (`(lambda ,args ,docstring ,_)
@@ -252,7 +256,7 @@ Corresponding floating points will be approximated by
       s)))
 
 (defun etd--github-id (command-name signature)
-  "Generate GitHub ID for COMMAND-NAME and SIGNATURE."
+  "Generate GitHub anchor id using COMMAND-NAME and SIGNATURE."
   (etd--docs--chop-suffix
    "-"
    (replace-regexp-in-string
