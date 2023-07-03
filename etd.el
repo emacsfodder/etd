@@ -68,7 +68,7 @@
    lists))
 
 (defun etd--compare-flat-lists (x y fn)
-  "Compare to flat lists X & Y using FN."
+  "Compare two flat lists X & Y using FN."
   (cl-reduce
    (lambda (c l) (and c (funcall fn (car l) (cdr l))))
    (etd--zip x y)))
