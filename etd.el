@@ -187,7 +187,7 @@ Corresponding floating points will be approximated by
 
 (defun etd--quote-and-downcase (str)
   "Wrap STR in backquotes for markdown."
-   (format "`%s`" (downcase str)))
+   (format " `%s` " (downcase str)))
 
 (defun etd--quote-docstring (docstring)
   "Quote DOCSTRING."
@@ -202,7 +202,7 @@ Corresponding floating points will be approximated by
          "\\1'\\2"
          (replace-regexp-in-string
            "`\\(.*?\\)'"
-           "`\\1`"
+           " `\\1` "
            (replace-regexp-in-string
             "\\b\\([A-Z][A-Z0-9-]*\\)\\b"
             #'etd--quote-and-downcase
