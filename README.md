@@ -103,6 +103,8 @@ Each one links to the full function entry in the `[[ function-docs ]]`.
  
 Which will be replaced by the list of function entries. Each one includes function signature, docstring (formatted for markdown) and the top three examples, make those top 3 good examples.
 
+Use `M-x etd-create-template-file` to generate a basic template file, 
+
 [See etd-example-template](./etd-examples-template)
 
 [Docs generated for Kurecolor](https://emacsfodder.github.io/kurecolor/)

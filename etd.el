@@ -46,6 +46,12 @@
 ```
 ")
 
+(defvar etd-basic-template
+  "[[ function-list ]]
+
+[[ function-docs ]]
+")
+
 (defvar etd--testing t "When set to t run tests, when set to nil generate documents.")
 (defvar etd--functions '() "Collected functions.")
 
@@ -309,6 +315,19 @@ Corresponding floating points will be approximated by
   (etd--create-docs-file template readme)
   (setq etd--testing t)
   (eval-buffer))
+
+(defun etd--write-basic-template (file)
+  "Write basic template to FILE."
+  (with-temp-file file
+    (insert etd-basic-template)))
+
+(defun etd-create-template-file (file)
+  "Create a basic template FILE.
+User confirmation of existing FILE overwrite."
+  (interactive "FNew Template filename: ")
+  (if (file-exists-p file)
+      (when (y-or-n-p (format "Template %s exists, overwrite?" file)) (etd--write-basic-template file))
+    (etd--write-basic-template file)))
 
 (defun etd-create-docs-file-for (examples-file template readme)
   "Using EXAMPLES-FILE and TEMPLATE create README."
