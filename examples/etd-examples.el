@@ -51,31 +51,38 @@
     (etd--docs--chop-suffix "////" "BigBaddaBoom////") => "BigBaddaBoom"
     (etd--docs--chop-suffix "Badda" "BigBaddaBoom") => "BigBaddaBoom")
 
-  (group "Utility Functions"
-    (examples etd--zip
-       (etd--zip '(1 3 5) '(2 4 6)) => '((1 . 2) (3 . 4) (5 . 6))))
+  (examples etd--quote-and-downcase
+    (etd--quote-and-downcase "STRING") => " `string` ")
 
-  (group "Matchers"
-    (examples etd--listsp
-       (etd--listsp '(1) '(1 2 3) '("a" "b")) => t
-       (etd--listsp '() nil '("a" "b")) => nil)
+  (examples etd--quote-docstring
+    (etd--quote-docstring "This is a TEST docstring.") => "This is a  `test`  docstring."
+    (etd--quote-docstring "Docstring X `~>' Y.") => "Docstring   `x`  `~>`   `y` ."))
 
-    (examples etd--compare-flat-lists
-       (etd--compare-flat-lists '(1 2) '(1 2) 'eql) => t
-       (etd--compare-flat-lists '(1 2) '(1 2) 'equal) => t)
+(group "Utility Functions"
+  (examples etd--zip
+     (etd--zip '(1 3 5) '(2 4 6)) => '((1 . 2) (3 . 4) (5 . 6))))
 
-    (examples etd--length=
-       (etd--length= '(12 1) '(12)) => nil
-       (etd--length= "hello" "world") => t
-       (etd--length= '("1" "2") '("a" "b")) => t)
+(group "Matchers"
+  (examples etd--listsp
+     (etd--listsp '(1) '(1 2 3) '("a" "b")) => t
+     (etd--listsp '() nil '("a" "b")) => nil)
 
-    (examples etd--approx-equal
-       (etd--approx-equal 1.1112 1.1113) => t
-       (etd--approx-equal 1.1112 1.111) => nil)
+  (examples etd--compare-flat-lists
+     (etd--compare-flat-lists '(1 2) '(1 2) 'eql) => t
+     (etd--compare-flat-lists '(1 2) '(1 2) 'equal) => t)
 
-    (examples etd--lists-approx-equal
-       (etd--lists-approx-equal '(1.1113 1.1112) '(1.1112 1.1113)) => t
-       (etd--lists-approx-equal '(1.113 1.1112) '(1.2 1.111)) => nil)))
+  (examples etd--length=
+     (etd--length= '(12 1) '(12)) => nil
+     (etd--length= "hello" "world") => t
+     (etd--length= '("1" "2") '("a" "b")) => t)
+
+  (examples etd--approx-equal
+     (etd--approx-equal 1.1112 1.1113) => t
+     (etd--approx-equal 1.1112 1.111) => nil)
+
+  (examples etd--lists-approx-equal
+     (etd--lists-approx-equal '(1.1113 1.1112) '(1.1112 1.1113)) => t
+     (etd--lists-approx-equal '(1.113 1.1112) '(1.2 1.111)) => nil))
 
 (provide 'etd-examples)
 ;;; etd-examples.el ends here
