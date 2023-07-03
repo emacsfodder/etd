@@ -92,7 +92,7 @@
 (defun etd--approx-equal (x y)
   "Test approximate equality.
 
-In `etd-examples' use the form  `X ~> Y'.
+In `etd-examples' use the form  X `~>' Y.
 
 Corresponding floating points will be approximated by
 `etd-float-precision'"
@@ -106,7 +106,7 @@ Corresponding floating points will be approximated by
 (defun etd--lists-approx-equal (x y)
   "Test approximate equality of X and Y, lists of floating point numbers.
 
-In `etd-examples' use the from  `X ~> Y'.
+In `etd-examples' use the from  X `~>' Y.
 
 Corresponding floating points will be approximated by
 `etd-float-precision'"
