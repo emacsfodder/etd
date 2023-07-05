@@ -2,7 +2,7 @@
 ### Minimalist unit testing in Emacs, with documentation generation as a side effect.
 
 
-![ETD-illustration](https://user-images.githubusercontent.com/71587/189462116-6405d85c-ff23-4c3f-adc4-5e326ab7970c.png)
+![ETD-illustration](images/etd_splash.jpg)
 
 Derived from the test/docs functions/macros in [magnars/s.el](https://github.com/magnars/s.el) library.
 
