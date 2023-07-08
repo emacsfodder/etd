@@ -6,7 +6,7 @@
 ;;
 ;; Created: August 14, 2022
 ;; Modified: September 10, 2022
-;; Version: 2.1.0
+;; Version: 2.1.1
 ;; Keywords: lisp tools extensions
 ;;
 ;; Homepage: https://github.com/emacsfodder/kurecolor
@@ -35,7 +35,12 @@
 (require 'ert)
 (require 'cl-lib)
 
-(defvar etd-float-precision 0.0001)
+(defvar etd-float-precision 0.0001
+  "Used by approximate equality matchers.")
+
+(defvar etd-example-length 3
+  "The number of examples to use in docs.")
+
 (defvar etd-function-to-md-template
   "### %s %s
 
@@ -44,16 +49,21 @@
 ```lisp
 %s
 ```
-")
+"
+  "Markdown template for a function documentation entry.")
 
 (defvar etd-basic-template
   "[[ function-list ]]
 
 [[ function-docs ]]
-")
+"
+  "Example template used to generate docs sections.")
 
-(defvar etd--testing t "When set to t run tests, when set to nil generate documents.")
-(defvar etd--functions '() "Collected functions.")
+(defvar etd--testing t
+  "When set to t run tests, when set to nil generate documents.")
+
+(defvar etd--functions '()
+  "Collected functions for documentation.")
 
 (defun etd--zip (x y)
   "Zip lists X & Y together as a list of cons cells."
@@ -244,7 +254,7 @@ Note, this is only useful for user defined functions/macros."
               signature
               docstring
               (mapconcat 'identity
-                         (etd--first-three fn-examples)
+                         (cl-subseq fn-examples 0 etd-example-length)
                          "\n")))))
 
 (defun etd--docs--chop-suffix (suffix s)
@@ -267,16 +277,6 @@ Note, this is only useful for user defined functions/macros."
             (if signature
                 signature
               "")))))
-
-(defun etd--first-three (example-list)
-  "Select first 3 examples from EXAMPLE-LIST."
-    (pcase example-list
-     (`(,first ,second ,third . ,_)
-      (list first second third))
-     (`(,first ,second . ,_)
-      (list first second))
-     (`(,first . ,_)
-      (list first))))
 
 (defun etd--simplify-quotes ()
   "Simplify quotes in buffer."

@@ -32,14 +32,10 @@
 ;; ETD testing ...
 
 (group "Documentation Helper Functions"
-  (examples etd--first-three
-     (etd--first-three '("one" "two" "three" "four" "five")) => '("one" "two" "three")
-     (etd--first-three '(1 2 3 4 5)) => '(1 2 3))
-
   (examples etd--function-summary
     (etd--function-summary
-      (etd--get-function-info 'etd--first-three)
-     => "\n* [first-three](#first-three-list) `(example-list)`"))
+      (etd--get-function-info 'etd--github-id)
+     => "\n* [github-id](#github-id) `(command-name signature)`"))
 
   (examples etd--github-id
     (etd--github-id "foobzz" "(string &optional arg)") => "-foobzz-string-optional-arg"
