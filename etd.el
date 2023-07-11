@@ -254,7 +254,7 @@ Note, this is only useful for user defined functions/macros."
               signature
               docstring
               (mapconcat 'identity
-                         (cl-subseq fn-examples 0 etd-example-length)
+                         (cl-subseq fn-examples 0 (min (length fn-examples) etd-example-length))
                          "\n")))))
 
 (defun etd--docs--chop-suffix (suffix s)
