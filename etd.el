@@ -6,7 +6,7 @@
 ;;
 ;; Created: August 14, 2022
 ;; Modified: September 10, 2022
-;; Version: 2.1.1
+;; Version: 2.1.2
 ;; Keywords: lisp tools extensions
 ;;
 ;; Homepage: https://github.com/emacsfodder/kurecolor
