@@ -1,3 +1,5 @@
+name: "Tests and Docs"
+
 on:
   push:
     branches: [ "main" ]
